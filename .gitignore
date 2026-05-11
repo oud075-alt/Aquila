@@ -25,3 +25,7 @@ Thumbs.db
 .env
 data/
 !data/.gitkeep
+
+# Build artifacts (we intentionally COMMIT the release zip in dist/)
+*.egg-info/
+build/
