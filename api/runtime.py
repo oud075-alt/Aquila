@@ -7,6 +7,13 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 
+from brain import (
+    AdaptiveLearningEngine,
+    ContextFusionEngine,
+    DecisionEngine,
+    RiskIntelligenceEngine,
+    StrategyRouter,
+)
 from core.ingestion.base_adapter import IngestionEvent
 from core.ingestion.replay_adapter import ReplayAdapter
 from core.observability import HealthMonitor, default_registry, get_logger, init_logging
@@ -32,14 +39,26 @@ class Runtime:
         self.data_root = Path(data_root or DEFAULT_DATA_ROOT)
         self.data_root.mkdir(parents=True, exist_ok=True)
 
+        self.sqlite = SQLiteDiagnosisStore(self.data_root / "mspis.db")
+        self.timeseries = TimeSeriesStore(self.data_root / "timeseries")
+        self.memory = MemoryStore(self.data_root / "memory.db")
+
+        self.decision_engine = DecisionEngine()
+        self.context_fusion = ContextFusionEngine()
+        self.strategy_router = StrategyRouter()
+        self.risk_engine = RiskIntelligenceEngine()
+        self.adaptive_learning = AdaptiveLearningEngine(self.memory)
+
         self.coordinator = DiagnosisCoordinator(
             symbol=DEFAULT_SYMBOL,
             source=SourceMode.REPLAY,
             timeframes=(Timeframe.ONE_MIN,),
+            decision_hook=self.decision_engine.decide,
+            risk_hook=self.risk_engine.evaluate,
+            context_fusion_hook=self.context_fusion.fuse,
+            strategy_router_hook=self.strategy_router.route,
+            adaptive_learning_hook=self.adaptive_learning,
         )
-        self.sqlite = SQLiteDiagnosisStore(self.data_root / "mspis.db")
-        self.timeseries = TimeSeriesStore(self.data_root / "timeseries")
-        self.memory = MemoryStore(self.data_root / "memory.db")
         self.health = HealthMonitor()
         self.metrics = default_registry
         self._lock = asyncio.Lock()

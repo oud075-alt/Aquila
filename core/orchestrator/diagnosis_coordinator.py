@@ -9,7 +9,7 @@ Phase 0 defaults are used.
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
-from typing import Optional
+from typing import Optional, Protocol
 
 from core.ingestion.base_adapter import BaseAdapter, IngestionEvent
 from core.orchestrator.context_manager import ContextManager
@@ -23,7 +23,19 @@ from core.orchestrator.pipeline_executor import (
 from core.orchestrator.state_bus import StateBus, StateKey
 from core.schemas.diagnosis_envelope import DiagnosisEnvelope
 from core.schemas.enums import SourceMode, Timeframe
-from core.schemas.market_state import DEFAULT_SYMBOL
+from core.schemas.market_state import DEFAULT_SYMBOL, MarketState
+
+
+class AdaptiveLearningHook(Protocol):
+    """Phase 5 sink protocol. Any object with `.observe(envelope, market_state)` qualifies."""
+
+    async def observe(
+        self,
+        *,
+        envelope: "DiagnosisEnvelope",
+        market_state: MarketState,
+    ) -> None:  # pragma: no cover - protocol
+        ...
 
 
 class DiagnosisCoordinator:
@@ -40,9 +52,7 @@ class DiagnosisCoordinator:
         risk_hook: RiskHook | None = None,
         context_fusion_hook: ContextHook | None = None,
         strategy_router_hook: RouterHook | None = None,
-        adaptive_learning_hook: Optional[
-            "AdaptiveLearningHook"  # noqa: F821 — forward reference (Phase 5)
-        ] = None,
+        adaptive_learning_hook: Optional[AdaptiveLearningHook] = None,
     ) -> None:
         self.symbol = symbol.upper()
         self.source = source
