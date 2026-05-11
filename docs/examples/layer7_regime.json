@@ -1,0 +1,28 @@
+{
+  "layer": "regime",
+  "symbol": "BTCUSDT",
+  "confidence": 0.49,
+  "visibility": "full",
+  "payload": {
+    "current": {
+      "volatility": "high_vol",
+      "liquidity": "thin_liquidity",
+      "participation": "low_participation",
+      "instability": 0.51
+    },
+    "mutations": [
+      "vol:normal_vol->high_vol",
+      "liq:deep_liquidity->thin_liquidity"
+    ],
+    "transitions": [
+      {
+        "from_state": {"volatility": "normal_vol", "liquidity": "deep_liquidity", "participation": "high_participation", "instability": 0.1},
+        "to_state":   {"volatility": "high_vol",   "liquidity": "thin_liquidity", "participation": "low_participation",  "instability": 0.51},
+        "probability": 0.0,
+        "rationale": "novel"
+      }
+    ],
+    "instability_score": 0.51,
+    "calibration_delta": 0.018
+  }
+}

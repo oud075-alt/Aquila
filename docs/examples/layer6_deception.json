@@ -1,0 +1,29 @@
+{
+  "layer": "deception",
+  "symbol": "BTCUSDT",
+  "confidence": 0.71,
+  "visibility": "full",
+  "payload": {
+    "deception_probability": 0.71,
+    "signatures": [
+      {
+        "kind": "bull_trap",
+        "probability": 0.66,
+        "severity": "high",
+        "rationale": "upward displacement with absorption + upper-wick rejection"
+      }
+    ],
+    "lures": [
+      {
+        "lure_type": "expansion_lure",
+        "probability": 0.5,
+        "target_zone_hint": "prior_swing_band"
+      }
+    ],
+    "narrative": {
+      "score": 0.55,
+      "description": "trend with rejection wick; high pathology contradiction"
+    },
+    "notes": []
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "layer": "temporal",
+  "symbol": "BTCUSDT",
+  "confidence": 0.62,
+  "visibility": "full",
+  "payload": {
+    "states": [
+      {"timeframe": "M5", "state": "trend_up", "confidence": 0.74},
+      {"timeframe": "H1", "state": "range", "confidence": 0.61},
+      {"timeframe": "H4", "state": "trend_down", "confidence": 0.67}
+    ],
+    "fused_state": "range",
+    "alignment_score": 0.33,
+    "conflict_graph": {
+      "edges": [
+        {"higher": "H1", "lower": "M5", "higher_state": "range", "lower_state": "trend_up", "score": 0.3},
+        {"higher": "H4", "lower": "M5", "higher_state": "trend_down", "lower_state": "trend_up", "score": 0.8}
+      ]
+    }
+  }
+}

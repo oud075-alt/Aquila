@@ -1,0 +1,30 @@
+{
+  "event_id": "8f9a4b...",
+  "schema_version": "1.0.0",
+  "layer": "memory",
+  "symbol": "BTCUSDT",
+  "correlation_id": "b3c9...",
+  "timestamp": "2026-05-11T10:00:00Z",
+  "confidence": 0.78,
+  "visibility": "full",
+  "origin": "real",
+  "evidence": [
+    {"event_id": "structural-...", "layer": "structural", "timestamp": "2026-05-11T10:00:00Z"}
+  ],
+  "payload": {
+    "analogs": [
+      {
+        "record": {"episode_id": "ep-a1", "symbol": "BTCUSDT", "regime_tag": "high_vol"},
+        "similarity": 0.91
+      },
+      {
+        "record": {"episode_id": "ep-b2", "symbol": "BTCUSDT", "regime_tag": "high_vol"},
+        "similarity": 0.84
+      }
+    ],
+    "sequence_match": ["ep-c3", "ep-c7"],
+    "archive_size": 1042,
+    "written": true,
+    "correlated_event_id": "structural-..."
+  }
+}
