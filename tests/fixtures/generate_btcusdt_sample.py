@@ -7,7 +7,7 @@ exercise pathology primitives across multiple structural states.
 from __future__ import annotations
 
 import math
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -16,7 +16,7 @@ import pandas as pd
 
 def generate(num_bars: int = 512, seed: int = 0) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
-    base = datetime(2026, 1, 1, tzinfo=timezone.utc).timestamp()
+    base = datetime(2026, 1, 1, tzinfo=UTC).timestamp()
     times = (base + np.arange(num_bars) * 60.0) * 1_000_000_000
     timestamps = pd.to_datetime(times.astype("int64"), unit="ns", utc=True)
 
@@ -61,5 +61,5 @@ def write_default(path: Path | None = None) -> Path:
 
 if __name__ == "__main__":
     p = write_default()
-    print(f"wrote {p} ({p.stat().st_size} bytes)")  # noqa: T201
+    print(f"wrote {p} ({p.stat().st_size} bytes)")
     assert math.isfinite(generate(8).close.iloc[-1])

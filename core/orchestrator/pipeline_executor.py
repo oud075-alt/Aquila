@@ -22,8 +22,8 @@ the optional callables passed at construction.
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
-from typing import Awaitable, Callable, Optional
 
 from core.contradiction import (
     ConfidenceAggregator,
@@ -60,7 +60,7 @@ RiskHook = Callable[
     [MarketState, PathologyReport, RegimeState, ContradictionReport],
     Awaitable[RiskState],
 ]
-ContextHook = Callable[[ContextManager], Awaitable[Optional[TimeframeContext]]]
+ContextHook = Callable[[ContextManager], Awaitable[TimeframeContext | None]]
 RouterHook = Callable[
     [MarketState, PathologyReport, RegimeState, DecisionPayload, RiskState],
     Awaitable[DecisionPayload],
@@ -101,6 +101,11 @@ class PipelineExecutor:
     async def diagnose(self, state: MarketState) -> DiagnosisEnvelope:
         pathology = self.pathology_engine.compute(state)
         regime = self.regime_classifier.classify(pathology)
+
+        stream = self.context_manager.stream(timeframe=state.timeframe, symbol=state.symbol)
+        stream.market_state = state
+        stream.pathology = pathology
+        stream.regime = regime
 
         decision_default = self._default_decision(pathology, regime)
         coordinator_ctx = DiagnosisCoordinatorContext(previous_envelope=self._last_envelope)

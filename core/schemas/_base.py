@@ -12,7 +12,7 @@ These five fields are required by Phase 0A.
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -48,8 +48,8 @@ class MSPISSchema(BaseModel):
     def _require_utc(cls, v: datetime) -> datetime:
         if v.tzinfo is None:
             raise ValueError("timestamp must be timezone-aware UTC")
-        if v.utcoffset() != timezone.utc.utcoffset(v):
-            return v.astimezone(timezone.utc)
+        if v.utcoffset() != UTC.utcoffset(v):
+            return v.astimezone(UTC)
         return v
 
     @field_validator("schema_version")

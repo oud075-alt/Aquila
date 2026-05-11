@@ -43,7 +43,7 @@ class SQLiteDiagnosisStore:
         with self._lock:
             self._conn.close()
 
-    def __enter__(self) -> "SQLiteDiagnosisStore":
+    def __enter__(self) -> SQLiteDiagnosisStore:
         return self
 
     def __exit__(self, *_: object) -> None:

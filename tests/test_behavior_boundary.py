@@ -21,9 +21,9 @@ from __future__ import annotations
 import importlib
 import inspect
 import pkgutil
-import tempfile
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
@@ -133,8 +133,8 @@ GET_ENDPOINTS: tuple[str, ...] = (
 
 @pytest.fixture
 def api_client(tmp_data_root: Path, sample_parquet: Path) -> Iterable[TestClient]:
-    from api.runtime import Runtime
     from api.main import app
+    from api.runtime import Runtime
 
     Runtime.reset()
     runtime = Runtime.instance()
@@ -169,6 +169,7 @@ def test_replay_response_clean(api_client: TestClient) -> None:
 def test_invalid_diagnosis_still_no_forbidden_keys(sample_parquet: Path) -> None:
     """Even diagnoses that hit INVALID contradiction policy must obey Appendix I."""
     import asyncio
+
     from core.ingestion import ReplayAdapter
     from core.orchestrator import DiagnosisCoordinator
     from core.schemas.enums import Timeframe

@@ -7,7 +7,7 @@ to the orchestrator; deterministic replay tests do NOT depend on it.
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from core.ingestion.base_adapter import BaseAdapter, IngestionEvent
 from core.ingestion.websocket_manager import WebsocketManager
@@ -57,18 +57,18 @@ class LiveMarketAdapter(BaseAdapter):
             if k is None:
                 continue
             try:
-                event_time = datetime.fromtimestamp(int(k["t"]) / 1000.0, tz=timezone.utc)
+                event_time = datetime.fromtimestamp(int(str(k["t"])) / 1000.0, tz=UTC)
                 bar = MarketBar(
                     timestamp=event_time,
                     timeframe=self.timeframe,
                     source=self.source,
                     confidence=1.0 if bool(k.get("x", False)) else 0.5,
                     symbol=self.symbol,
-                    open=float(k["o"]),
-                    high=float(k["h"]),
-                    low=float(k["l"]),
-                    close=float(k["c"]),
-                    volume=float(k["v"]),
+                    open=float(str(k["o"])),
+                    high=float(str(k["h"])),
+                    low=float(str(k["l"])),
+                    close=float(str(k["c"])),
+                    volume=float(str(k["v"])),
                     is_partial=not bool(k.get("x", False)),
                 )
             except (KeyError, TypeError, ValueError):

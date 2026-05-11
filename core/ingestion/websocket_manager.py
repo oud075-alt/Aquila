@@ -10,7 +10,7 @@ import contextlib
 import json
 from collections.abc import AsyncIterator, Awaitable, Callable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import websockets
 from websockets.exceptions import ConnectionClosed
@@ -59,7 +59,7 @@ class WebsocketManager:
                     heartbeat_task = asyncio.create_task(self._heartbeat_loop())
                     try:
                         async for raw in ws:
-                            now = datetime.now(tz=timezone.utc)
+                            now = datetime.now(tz=UTC)
                             self._last_message_at = now
                             try:
                                 payload = json.loads(raw)
@@ -81,6 +81,6 @@ class WebsocketManager:
             await asyncio.sleep(self.heartbeat_seconds)
             if self._last_message_at is None:
                 continue
-            lag = (datetime.now(tz=timezone.utc) - self._last_message_at).total_seconds()
+            lag = (datetime.now(tz=UTC) - self._last_message_at).total_seconds()
             if lag > self.heartbeat_seconds and self.on_stale is not None:
                 await self.on_stale(lag)

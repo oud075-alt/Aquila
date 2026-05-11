@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from brain import (
@@ -31,7 +31,7 @@ DEFAULT_DATA_ROOT: Path = Path(
 class Runtime:
     """Singleton runtime wiring diagnosis coordinator + persistence + health."""
 
-    _instance: "Runtime | None" = None
+    _instance: Runtime | None = None
 
     def __init__(self, *, data_root: Path | None = None) -> None:
         init_logging(level=os.environ.get("MSPIS_LOG_LEVEL", "INFO"))
@@ -63,10 +63,10 @@ class Runtime:
         self.metrics = default_registry
         self._lock = asyncio.Lock()
         self._latest: DiagnosisEnvelope | None = None
-        self._started_at = datetime.now(tz=timezone.utc)
+        self._started_at = datetime.now(tz=UTC)
 
     @classmethod
-    def instance(cls) -> "Runtime":
+    def instance(cls) -> Runtime:
         if cls._instance is None:
             cls._instance = Runtime()
         return cls._instance

@@ -16,7 +16,7 @@ import sqlite3
 import threading
 from collections.abc import Iterator
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from core.persistence.migrations import PersistenceMigrator
@@ -103,7 +103,7 @@ class MemoryStore:
                     id=int(r[0]),
                     symbol=str(r[1]),
                     timeframe=Timeframe(r[2]),
-                    timestamp=datetime.fromtimestamp(int(r[3]) / 1e9, tz=timezone.utc),
+                    timestamp=datetime.fromtimestamp(int(r[3]) / 1e9, tz=UTC),
                     kind=str(r[4]),
                     payload=json.loads(r[5]),
                     outcome_score=None if r[6] is None else float(r[6]),
@@ -123,7 +123,7 @@ class MemoryStore:
                 id=int(r[0]),
                 symbol=str(r[1]),
                 timeframe=Timeframe(r[2]),
-                timestamp=datetime.fromtimestamp(int(r[3]) / 1e9, tz=timezone.utc),
+                timestamp=datetime.fromtimestamp(int(r[3]) / 1e9, tz=UTC),
                 kind=str(r[4]),
                 payload=json.loads(r[5]),
                 outcome_score=None,

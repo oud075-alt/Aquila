@@ -6,6 +6,7 @@ and exposes a deterministic `.evaluate(context)` returning ordered findings.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -19,7 +20,7 @@ DEFAULT_RULES_PATH: Path = Path(__file__).with_name("rules.yaml")
 
 Op = Literal[">=", "<=", ">", "<", "==", "!="]
 
-_OPS: dict[str, callable] = {
+_OPS: dict[str, Callable[[float, float], bool]] = {
     ">=": lambda a, b: a >= b,
     "<=": lambda a, b: a <= b,
     ">": lambda a, b: a > b,

@@ -15,7 +15,7 @@ from statistics import fmean, pstdev
 
 from core.orchestrator.context_manager import ContextManager
 from core.pathology.metrics import clip01
-from core.schemas.enums import Regime, Timeframe
+from core.schemas.enums import Regime
 from core.schemas.timeframe_context import TimeframeContext, TimeframeSnapshot
 
 DEFENSIVE_REGIMES: frozenset[Regime] = frozenset(

@@ -15,13 +15,13 @@ from core.contradiction.contradiction_matrix import (
 )
 
 __all__ = [
+    "LAMBDA_CONTRADICTION",
+    "LAMBDA_ENTROPY",
+    "LAMBDA_INSTABILITY",
     "ConfidenceAggregator",
     "ConsistencyValidator",
     "ContradictionContext",
     "ContradictionMatrix",
-    "LAMBDA_CONTRADICTION",
-    "LAMBDA_ENTROPY",
-    "LAMBDA_INSTABILITY",
     "PerModuleConfidence",
     "ValidationResult",
     "load_default_rules",

@@ -12,10 +12,10 @@ import contextvars
 import functools
 import secrets
 import time
-from collections.abc import Awaitable, Callable
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Any, Iterator, TypeVar
+from typing import Any, TypeVar
 
 from core.observability.logger import get_logger
 from core.observability.metrics import default_registry

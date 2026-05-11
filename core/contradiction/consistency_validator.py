@@ -11,11 +11,11 @@ Applies the policy action semantics defined in Appendix X and ADR-0003:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 
 from core.contradiction.contradiction_matrix import ContradictionContext, ContradictionMatrix
 from core.schemas.contradiction_report import ContradictionFinding, ContradictionReport
 from core.schemas.enums import ContradictionPolicy, SourceMode, Timeframe
-from datetime import datetime
 
 UNSTABLE_CONFIDENCE_FACTOR: float = 0.5
 UNSTABLE_SCORE_FLOOR: float = 0.70

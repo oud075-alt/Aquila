@@ -49,9 +49,15 @@ select = [
     "E", "F", "W", "I", "B", "UP", "N", "ANN", "ASYNC", "RUF",
 ]
 ignore = [
-    "ANN101",
-    "ANN102",
+    "ANN401",
+    "ASYNC109",
+    "ASYNC240",
     "E501",
+    "RUF005",
+    "RUF012",
+    "RUF046",
+    "UP037",
+    "B008",
 ]
 
 [tool.ruff.lint.per-file-ignores]
@@ -73,8 +79,12 @@ warn_return_any = true
 show_error_codes = true
 
 [[tool.mypy.overrides]]
-module = ["scipy.*", "pyarrow.*"]
+module = ["scipy.*", "pyarrow.*", "pandas.*", "websockets.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["core.persistence.timeseries_store", "core.ingestion.replay_adapter"]
+disallow_untyped_calls = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

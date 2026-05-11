@@ -8,11 +8,11 @@ CI in tests/test_behavior_boundary.py).
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict
 
@@ -167,7 +167,7 @@ async def metrics() -> dict[str, Any]:
     return {
         "api_version": API_VERSION,
         "schema_version": "0.1.0",
-        "timestamp": datetime.now(tz=timezone.utc).isoformat(),
+        "timestamp": datetime.now(tz=UTC).isoformat(),
         "uptime_seconds": health.uptime_seconds,
         "stale_warnings": health.stale_warnings,
         "memory_warnings": health.memory_warnings,

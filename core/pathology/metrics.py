@@ -70,7 +70,7 @@ def trend_slope(closes: npt.ArrayLike, *, window: int = 32) -> float:
     if denom <= EPS:
         return 0.0
     slope = float(((x - x_mean) * (seg - y_mean)).sum() / denom)
-    return slope / max(abs(y_mean), EPS)
+    return slope / max(abs(float(y_mean)), EPS)
 
 
 def directional_efficiency(closes: npt.ArrayLike, *, window: int = 32) -> float:
@@ -118,7 +118,8 @@ def lag1_autocorr(arr: npt.ArrayLike) -> float:
     s1 = a1.std()
     if s0 <= EPS or s1 <= EPS:
         return 0.0
-    return float(((a0 - m0) * (a1 - m1)).mean() / (s0 * s1))
+    cov = float(np.mean((a0 - m0) * (a1 - m1)))
+    return cov / float(s0 * s1)
 
 
 def sigmoid(x: float, *, gain: float = 1.0) -> float:

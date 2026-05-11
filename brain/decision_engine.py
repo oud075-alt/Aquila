@@ -260,14 +260,17 @@ class DecisionEngine:
         if defensive_state and risk_mode == RISK_MODE_DEFAULT:
             risk_mode = RISK_MODE_DEFENSIVE
 
-        reasoning_tuple = tuple(reasoning + [
-            f"regime={regime.regime.value}",
-            f"structural_state={structural_state.value}",
-            f"aggregate={aggregate:.2f}",
-            f"instability={instability:.2f}",
-            f"escalation={escalation:.2f}",
-            f"confidence={confidence_value:.2f}",
-        ])
+        reasoning.extend(
+            [
+                f"regime={regime.regime.value}",
+                f"structural_state={structural_state.value}",
+                f"aggregate={aggregate:.2f}",
+                f"instability={instability:.2f}",
+                f"escalation={escalation:.2f}",
+                f"confidence={confidence_value:.2f}",
+            ]
+        )
+        _ = reasoning
 
         return DecisionPayload(
             timestamp=pathology.timestamp,

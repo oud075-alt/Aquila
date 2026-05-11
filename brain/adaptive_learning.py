@@ -45,7 +45,7 @@ from datetime import datetime
 import numpy as np
 
 from core.pathology.metrics import EPS
-from core.persistence.memory_store import MemoryEntry, MemoryStore
+from core.persistence.memory_store import MemoryStore
 from core.schemas.diagnosis_envelope import DiagnosisEnvelope
 from core.schemas.enums import Regime, StructuralState, Timeframe
 from core.schemas.market_state import MarketState

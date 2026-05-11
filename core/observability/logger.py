@@ -47,7 +47,7 @@ def init_logging(*, level: str = "INFO") -> None:
     _INITIALIZED = True
 
 
-def get_logger(name: str | None = None) -> structlog.stdlib.BoundLogger:
+def get_logger(name: str | None = None) -> Any:
     if not _INITIALIZED:
         init_logging()
     return structlog.get_logger(name) if name else structlog.get_logger()

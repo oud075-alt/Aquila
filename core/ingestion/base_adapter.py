@@ -10,7 +10,7 @@ from __future__ import annotations
 import abc
 from collections.abc import AsyncIterator
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from core.schemas.enums import SourceMode, Timeframe
 from core.schemas.market_state import MarketBar
@@ -80,4 +80,4 @@ class BaseAdapter(abc.ABC):
 
     def now_utc(self) -> datetime:
         """Wall-clock UTC. Overridden in tests for determinism."""
-        return datetime.now(tz=timezone.utc)
+        return datetime.now(tz=UTC)

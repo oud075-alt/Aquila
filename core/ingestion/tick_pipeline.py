@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator, Iterable
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from core.schemas.enums import SourceMode, Timeframe
 from core.schemas.market_state import DEFAULT_SYMBOL, MarketBar
@@ -57,7 +57,7 @@ class TickPipeline:
         tf = self.timeframe.seconds
         epoch = int(ts.timestamp())
         bucket = (epoch // tf) * tf
-        return datetime.fromtimestamp(bucket, tz=timezone.utc)
+        return datetime.fromtimestamp(bucket, tz=UTC)
 
     def _emit(self, *, is_partial: bool) -> MarketBar | None:
         if self._bucket_start is None or self._open is None:

@@ -9,7 +9,7 @@ Phase 0 defaults are used.
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
-from typing import Optional, Protocol
+from typing import Protocol
 
 from core.ingestion.base_adapter import BaseAdapter, IngestionEvent
 from core.orchestrator.context_manager import ContextManager
@@ -32,7 +32,7 @@ class AdaptiveLearningHook(Protocol):
     async def observe(
         self,
         *,
-        envelope: "DiagnosisEnvelope",
+        envelope: DiagnosisEnvelope,
         market_state: MarketState,
     ) -> None:  # pragma: no cover - protocol
         ...
@@ -52,7 +52,7 @@ class DiagnosisCoordinator:
         risk_hook: RiskHook | None = None,
         context_fusion_hook: ContextHook | None = None,
         strategy_router_hook: RouterHook | None = None,
-        adaptive_learning_hook: Optional[AdaptiveLearningHook] = None,
+        adaptive_learning_hook: AdaptiveLearningHook | None = None,
     ) -> None:
         self.symbol = symbol.upper()
         self.source = source

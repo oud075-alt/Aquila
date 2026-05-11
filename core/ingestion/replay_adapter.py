@@ -14,7 +14,7 @@ from __future__ import annotations
 import os
 import random
 from collections.abc import AsyncIterator
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -65,16 +65,16 @@ class ReplayAdapter(BaseAdapter):
         self.parquet_path = Path(parquet_path)
         if not self.parquet_path.exists():
             raise FileNotFoundError(f"replay parquet not found: {self.parquet_path}")
-        self._fixed_processing_time = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        self._fixed_processing_time = datetime(2026, 1, 1, tzinfo=UTC)
 
     def _coerce_timestamp(self, value: object) -> datetime:
         if isinstance(value, datetime):
-            return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
+            return value if value.tzinfo else value.replace(tzinfo=UTC)
         if isinstance(value, np.datetime64):
             ns = int(value.astype("datetime64[ns]").astype("int64"))
-            return datetime.fromtimestamp(ns / 1e9, tz=timezone.utc)
+            return datetime.fromtimestamp(ns / 1e9, tz=UTC)
         if isinstance(value, int):
-            return datetime.fromtimestamp(value / 1e9, tz=timezone.utc)
+            return datetime.fromtimestamp(value / 1e9, tz=UTC)
         raise TypeError(f"unsupported timestamp column dtype: {type(value).__name__}")
 
     async def _stream(self) -> AsyncIterator[IngestionEvent]:
@@ -97,7 +97,7 @@ class ReplayAdapter(BaseAdapter):
                     missing_bars = max(int(round(gap / tf_seconds)) - 1, 0)
                     for k in range(1, missing_bars + 1):
                         recovered_ts = last_ts.timestamp() + k * tf_seconds
-                        recovered_dt = datetime.fromtimestamp(recovered_ts, tz=timezone.utc)
+                        recovered_dt = datetime.fromtimestamp(recovered_ts, tz=UTC)
                         recovered_close = float(df.iloc[max(int(idx) - 1, 0)]["close"])
                         recovered_bar = MarketBar(
                             timestamp=recovered_dt,
