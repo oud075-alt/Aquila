@@ -1,0 +1,54 @@
+# MARKET STRUCTURAL PATHOLOGY INTELLIGENCE SYSTEM (MSPIS)
+# Python 3.12+ runtime dependencies.
+
+# --- Core numeric / data stack ---
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+statsmodels>=0.14
+pyarrow>=14.0
+
+# --- Machine learning ---
+scikit-learn>=1.3
+xgboost>=2.0
+lightgbm>=4.1
+
+# --- Technical / market analytics ---
+ta>=0.11.0
+
+# --- Models & schemas ---
+pydantic>=2.5
+pydantic-settings>=2.1
+python-dotenv>=1.0
+
+# --- API / async transport ---
+fastapi>=0.110
+uvicorn[standard]>=0.27
+websockets>=12.0
+aiohttp>=3.9
+requests>=2.31
+
+# --- Market data sources ---
+ccxt>=4.2
+MetaTrader5>=5.0.45 ; platform_system == "Windows"
+
+# --- Memory / vector store ---
+chromadb>=0.4.22
+sentence-transformers>=2.4
+
+# --- External intelligence (optional but required by spec) ---
+openai>=1.12
+
+# --- Caching / coordination ---
+redis>=5.0
+
+# --- Time / scheduling ---
+pytz>=2024.1
+
+# --- Visualization (secondary deliverable) ---
+matplotlib>=3.8
+plotly>=5.18
+
+# --- Testing ---
+pytest>=8.0
+pytest-asyncio>=0.23
