@@ -164,3 +164,23 @@ def test_audit_log_tamper_detection():
     assert log.verify()
     log._records[0] = log._records[0].model_copy(update={"confidence": 0.999})
     assert not log.verify()
+
+
+def test_audit_log_tamper_detection_payload_hash_field():
+    """Mutating payload_hash without rewriting record_hash must fail verify()."""
+    log = AuditLog()
+    from aquila.core.base import LayerOutput
+    from aquila.core.types import LayerName, Symbol, utcnow
+    from pydantic import BaseModel, ConfigDict
+
+    class P(BaseModel):
+        model_config = ConfigDict(frozen=True)
+        v: int = 0
+
+    out = LayerOutput(layer=LayerName.PRIMITIVES, symbol=Symbol("X"),
+                      timestamp=utcnow(), correlation_id="c", payload=P())
+    log.append(out)
+    log.append(out)
+    assert log.verify()
+    log._records[0] = log._records[0].model_copy(update={"payload_hash": "0" * 64})
+    assert not log.verify()
