@@ -1,0 +1,23 @@
+{
+  "@context": {
+    "@vocab": "https://aquila.local/ontology#",
+    "BacktestReport": "BacktestReport"
+  },
+  "@type": "BacktestReport",
+  "anomaly_id": "MSPIS-A-001",
+  "version": "0.1.0",
+  "n_events": 2000,
+  "n_triggers_detector": 98,
+  "n_triggers_baseline": 91,
+  "precision_detector": 0.5154639175257731,
+  "precision_baseline": 0.23076923076923078,
+  "lift": 0.28469468675654236,
+  "bootstrap_p_value": 0.0,
+  "bootstrap_ci_95": [
+    0.14931460292285037,
+    0.4118046901552056
+  ],
+  "success_metric_passed": false,
+  "schema_version": "1.0.0",
+  "generated_at": "2026-05-12T03:08:41.046540Z"
+}
