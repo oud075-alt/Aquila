@@ -29,7 +29,7 @@ aquila/
 ├── simulation/          Counterfactual + scenario stress (synthetic-origin tagged)
 ├── drift/               Calibration / contamination / overfitting / fixation
 ├── query/               CQRS projections + cognitive query engine
-├── probabilistic/       Bayesian reasoner + evidence weighting
+├── probabilistic/       Heuristic score fuser + evidence weighting (legacy "Bayesian" alias deprecated; see ADR-0006)
 ├── attention/           Salience allocator
 ├── experiments/         Experiment tracker + shadow executor
 ├── protocols/           Versioned schema compatibility matrix

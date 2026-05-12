@@ -33,7 +33,7 @@ What this PR delivers:
 | Drift monitor | **SCAFFOLDED** |
 | Ontology registry + versioning | **SCAFFOLDED** |
 | Cognitive query interface | **SCAFFOLDED** |
-| Probabilistic Bayesian framework | **SCAFFOLDED** |
+| Heuristic score fusion (formerly "Probabilistic Bayesian framework"; renamed in M3.1) | **SCAFFOLDED** |
 | Attention allocator | **SCAFFOLDED** |
 | Research experiment harness | **SPECIFIED** (doc + folder) |
 | Distributed runtime / IPC transport | **SPECIFIED** |

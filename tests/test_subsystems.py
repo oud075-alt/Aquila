@@ -11,7 +11,7 @@ from aquila.narrative import NarrativeExplainer
 from aquila.observability.audit import AuditLog
 from aquila.ontology.registry import OntologyRegistry
 from aquila.physics import StateTransitionPhysics
-from aquila.probabilistic import BayesianReasoner, Evidence
+from aquila.probabilistic import Evidence, HeuristicScoreFuser
 from aquila.protocols.compatibility import ProtocolCompatibilityMatrix
 from aquila.query.engine import CognitiveQueryEngine
 from aquila.safety import SafetyKernel
@@ -47,8 +47,8 @@ def test_export_round_trip(orchestrator, symbol, synthetic_bars):
     assert "@context" in blob and len(blob["outputs"]) == 8
 
 
-def test_bayesian_reasoner_updates():
-    pb = BayesianReasoner.update(
+def test_heuristic_score_fuser_fuses():
+    pb = HeuristicScoreFuser.fuse(
         "trap_active", prior=0.2,
         evidence=[Evidence(name="wick", likelihood=0.7, weight=2.0)],
     )
