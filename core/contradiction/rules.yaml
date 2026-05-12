@@ -1,0 +1,109 @@
+# Externalized contradiction matrix (Appendix N + W + X).
+#
+# Hardcoded thresholds are FORBIDDEN (Appendix W) — they MUST flow from here.
+# Adding or removing a rule requires an ADR and a schema_version bump if it
+# affects the DiagnosisEnvelope surface.
+
+thresholds:
+  HIGH: 0.70
+  LOW: 0.30
+
+rules:
+  # ---------- INVALID policy (Appendix X) ----------
+  - id: INVALID_HIGH_CONTRADICTION_VS_HIGH_CONFIDENCE
+    description: "HIGH contradiction score vs HIGH confidence"
+    policy: INVALID
+    severity: 0.95
+    conditions:
+      - {metric: contradiction_score_prior, op: ">=", threshold: HIGH}
+      - {metric: pre_aggregation_confidence, op: ">=", threshold: HIGH}
+
+  - id: INVALID_HIGH_PATHOLOGY_VS_HIGH_HEALTH
+    description: "HIGH pathology aggregation vs HIGH structural health"
+    policy: INVALID
+    severity: 1.00
+    conditions:
+      - {metric: pathology_aggregate, op: ">=", threshold: HIGH}
+      - {metric: structural_health, op: ">=", threshold: HIGH}
+
+  - id: INVALID_HIGH_INSTABILITY_VS_HIGH_CONTINUATION_CONFIDENCE
+    description: "HIGH instability vs HIGH continuation confidence"
+    policy: INVALID
+    severity: 0.95
+    conditions:
+      - {metric: instability_score, op: ">=", threshold: HIGH}
+      - {metric: continuation_confidence, op: ">=", threshold: HIGH}
+
+  - id: INVALID_HIGH_FRAGMENTATION_VS_LOW_ENTROPY
+    description: "HIGH structural fragmentation vs LOW entropy"
+    policy: INVALID
+    severity: 0.90
+    conditions:
+      - {metric: structural_fragmentation, op: ">=", threshold: HIGH}
+      - {metric: entropy_instability, op: "<=", threshold: LOW}
+
+  # ---------- UNSTABLE policy (Appendix X) ----------
+  - id: UNSTABLE_HIGH_ENTROPY_VS_HEALTHY_TREND_PERSISTENCE
+    description: "HIGH entropy vs HEALTHY trend persistence"
+    policy: UNSTABLE
+    severity: 0.70
+    conditions:
+      - {metric: entropy_instability, op: ">=", threshold: HIGH}
+      - {metric: trend_persistence_health, op: ">=", threshold: HIGH}
+
+  - id: UNSTABLE_HIGH_LIQUIDITY_FRAGILITY_VS_HIGH_EXPANSION_SUSTAINABILITY
+    description: "HIGH liquidity fragility vs HIGH expansion sustainability"
+    policy: UNSTABLE
+    severity: 0.70
+    conditions:
+      - {metric: liquidity_imbalance, op: ">=", threshold: HIGH}
+      - {metric: expansion_sustainability, op: ">=", threshold: HIGH}
+
+  - id: UNSTABLE_HIGH_VOLATILITY_DISORDER_VS_HEALTHY_STRUCTURAL_BALANCE
+    description: "HIGH volatility disorder vs HEALTHY structural balance"
+    policy: UNSTABLE
+    severity: 0.70
+    conditions:
+      - {metric: volatility_disorder, op: ">=", threshold: HIGH}
+      - {metric: structural_balance, op: ">=", threshold: HIGH}
+
+  - id: UNSTABLE_HIGH_CONTINUATION_DECAY_VS_STRONG_CONTINUATION_STATE
+    description: "HIGH continuation decay vs STRONG continuation state"
+    policy: UNSTABLE
+    severity: 0.70
+    conditions:
+      - {metric: continuation_decay, op: ">=", threshold: HIGH}
+      - {metric: continuation_state_strength, op: ">=", threshold: HIGH}
+
+  # ---------- CRITICAL policy (Appendix X) ----------
+  - id: CRITICAL_HIGH_ESCALATION_VS_LOW_DEFENSIVE_POSTURE
+    description: "HIGH escalation risk vs LOW defensive posture"
+    policy: CRITICAL
+    severity: 0.90
+    conditions:
+      - {metric: escalation_risk, op: ">=", threshold: HIGH}
+      - {metric: defensive_posture, op: "<=", threshold: LOW}
+
+  - id: CRITICAL_MACRO_INSTABILITY_VS_LOCAL_HEALTHY_EXPANSION
+    description: "MACRO instability vs LOCAL healthy expansion"
+    policy: CRITICAL
+    severity: 0.85
+    conditions:
+      - {metric: macro_instability, op: ">=", threshold: HIGH}
+      - {metric: local_expansion_health, op: ">=", threshold: HIGH}
+
+  - id: CRITICAL_HIGH_TIMEFRAME_COLLAPSE_VS_LOW_TIMEFRAME_OPTIMISM
+    description: "HIGH timeframe collapse risk vs LOW timeframe optimism"
+    policy: CRITICAL
+    severity: 0.85
+    conditions:
+      - {metric: timeframe_collapse_risk, op: ">=", threshold: HIGH}
+      - {metric: local_optimism, op: ">=", threshold: HIGH}
+
+  - id: CRITICAL_DEFENSIVE_REGIME_VS_AGGRESSIVE_PARTICIPATION
+    description: "DEFENSIVE regime vs AGGRESSIVE participation bias"
+    policy: CRITICAL
+    severity: 0.90
+    conditions:
+      - {metric: regime_is_defensive, op: ">=", threshold: HIGH}
+      - {metric: aggressive_participation, op: ">=", threshold: HIGH}
