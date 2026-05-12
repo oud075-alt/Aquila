@@ -8,7 +8,7 @@ from aquila.observability.audit import AuditLog
 from aquila.ontology.registry import OntologyRegistry
 from aquila.protocols.compatibility import ProtocolCompatibilityMatrix
 from aquila.safety import SafetyKernel
-from aquila.validation.falsifiability import FalsifiabilityChecker
+from aquila.validation.falsifiability import FalsificationTestRunner
 
 
 class ValidationReport(BaseModel):
@@ -41,7 +41,7 @@ class ValidationSuite:
         self._ont = ontology
         self._safety = safety
         self._protocols = protocols
-        self._falsifier = FalsifiabilityChecker(assumptions)
+        self._falsifier = FalsificationTestRunner(assumptions)
 
     def run(self, outputs: dict | None = None) -> ValidationReport:
         safety_ok = True
