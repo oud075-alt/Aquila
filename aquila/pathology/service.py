@@ -59,6 +59,12 @@ class PathologyContradictionLayer(PathologyService):
                     evidence=["rvol_breakout"],
                 ))
 
+            # DEPRECATED rule body — superseded by detector MSPIS-A-001.
+            # See aquila/detectors/builtin/mspis_a_001.py. This branch
+            # is preserved so existing pipeline tests keep producing the
+            # same PathologyReport shape. It will be removed two PRs
+            # after the registered detector reaches VERIFIED_EMPIRICAL
+            # (HARD RULE #8).
             if payload.state == StructuralState.EXPANSION and snap.volume_z < -0.3:
                 s = 0.5
                 sigs.append(PathologySignature(
