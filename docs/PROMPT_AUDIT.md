@@ -8,44 +8,50 @@ closes them, plus an honest scope statement.
 
 ## Honest scope statement
 
-The expanded prompt now specifies ~8 cognitive layers + ~25 supporting
-subsystems (causal graph, ontology, ingestion, simulation, validation, etc.).
-This is a multi-subsystem research platform.
+The expanded prompt specifies ~8 layers + ~25 supporting subsystems. This
+is a multi-subsystem research scaffold. Status terms below mean exactly
+what `docs/adr/ADR-0005-no-overclaim-policy.md` defines:
 
-What this PR delivers:
+- **VERIFIED_EMPIRICAL** — code exists AND an automated test asserts the behaviour on data.
+- **VERIFIED_STRUCTURAL** — code exists AND contract/structural tests pass; no empirical validation.
+- **SCAFFOLDED** — typed interfaces + minimal pass-through implementation; no empirical validation.
+- **SPECIFIED** — documented, no code yet.
 
-| Element | State |
-|---------|-------|
-| Cognitive Layers L1–L8 | **IMPLEMENTED** (functional, tested) |
-| Cognitive pipeline orchestrator + event bus | **IMPLEMENTED** |
-| Safety kernel (no-signal enforcement) | **IMPLEMENTED** |
-| Episodic Memory store (in-mem + JSONL) | **IMPLEMENTED** |
-| Replay framework (deterministic, slice-aware) | **IMPLEMENTED** |
-| FastAPI surface for all layers | **IMPLEMENTED** |
-| Ingestion (adapter interface + in-proc adapter) | **IMPLEMENTED** |
-| Narrative / explainability emitter | **IMPLEMENTED** |
-| Causal graph engine | **SCAFFOLDED** (typed interfaces + minimal implementation) |
-| Liquidity ontology | **SCAFFOLDED** |
-| Transition physics engine | **SCAFFOLDED** |
-| Cross-asset intermarket cognition | **SCAFFOLDED** |
-| Data governance + event sourcing log | **SCAFFOLDED** |
-| Structural simulation / counterfactual | **SCAFFOLDED** |
-| Drift monitor | **SCAFFOLDED** |
-| Ontology registry + versioning | **SCAFFOLDED** |
-| Cognitive query interface | **SCAFFOLDED** |
-| Probabilistic Bayesian framework | **SCAFFOLDED** |
-| Attention allocator | **SCAFFOLDED** |
-| Research experiment harness | **SPECIFIED** (doc + folder) |
-| Distributed runtime / IPC transport | **SPECIFIED** |
-| Real-time ingestion gateways (Kafka/NATS) | **SPECIFIED** |
-| Scientific validation framework | **SCAFFOLDED** (suite skeleton) |
-| Observability (logging + audit) | **IMPLEMENTED** |
+| Element | Status | Empirical Validation |
+|---------|--------|----------------------|
+| Layer L1 Primitives | VERIFIED_STRUCTURAL | structural only |
+| Layer L2 Structural | VERIFIED_STRUCTURAL | structural only |
+| Layer L3 Disequilibrium (pathology) | SCAFFOLDED | none |
+| Layer L4 Memory | SCAFFOLDED | none |
+| Layer L5 Temporal | SCAFFOLDED | none |
+| Layer L6 Deception / Trap Heuristics | SCAFFOLDED | none |
+| Layer L7 Regime Tracking | SCAFFOLDED | none |
+| Layer L8 Meta Aggregation | SCAFFOLDED | none |
+| Cognitive pipeline orchestrator + event bus | VERIFIED_STRUCTURAL | structural only |
+| Safety kernel (no-signal enforcement) | VERIFIED_STRUCTURAL | structural only |
+| Episodic Memory store (in-mem + JSONL) | SCAFFOLDED | none |
+| Replay framework (deterministic, slice-aware) | VERIFIED_STRUCTURAL | structural only |
+| FastAPI surface for all layers | VERIFIED_STRUCTURAL | structural only |
+| Ingestion (adapter interface + in-proc adapter) | SCAFFOLDED | none |
+| Narrative / explainability emitter | SCAFFOLDED | none |
+| Causal graph engine (LineageGraph candidate) | SCAFFOLDED | none |
+| Liquidity ontology | SCAFFOLDED | none |
+| Transition physics engine | SCAFFOLDED | none |
+| Cross-asset intermarket | SCAFFOLDED | none |
+| Data governance + event sourcing log | SCAFFOLDED | none |
+| Structural simulation / counterfactual | SCAFFOLDED | none |
+| Drift monitor | SCAFFOLDED | none |
+| Ontology registry + versioning | SCAFFOLDED | none |
+| Cognitive query interface | SCAFFOLDED | none |
+| Probabilistic Bayesian framework | SCAFFOLDED | none |
+| Attention allocator | SCAFFOLDED | none |
+| Research experiment harness | SPECIFIED | none |
+| Distributed runtime / IPC transport | SPECIFIED | none |
+| Real-time ingestion gateways (Kafka/NATS) | SPECIFIED | none |
+| Scientific validation framework | VERIFIED_STRUCTURAL | empirical falsification runner exercises 4 falsifier tests |
+| Observability (audit chain) | VERIFIED_STRUCTURAL | tamper tests assert chain integrity |
 
-Everything marked **SCAFFOLDED** ships with typed interfaces, Pydantic
-schemas, and a minimal in-process implementation that returns valid empty
-results — no `NotImplementedError`, so the system runs end-to-end. Items
-marked **SPECIFIED** are documented in `docs/` and have folder + `__init__.py`
-ready for future implementation.
+Compile-pass alone is **not** a status. See ADR-0005.
 
 ---
 
