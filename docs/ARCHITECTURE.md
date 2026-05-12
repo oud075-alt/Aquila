@@ -21,7 +21,7 @@ aquila/
 ├── pipeline/            DAG orchestrator + event bus + lifecycle
 ├── replay/              Deterministic replay runner + slicer + replay context
 ├── narrative/           Analyst-readable explainer (no signals)
-├── causal/              Event-level causal graph engine
+├── causal/              Per-cycle event lineage graph (formerly "Causal Graph Engine"; renamed in M3.2, see ADR-0009)
 ├── ontology/            Versioned ontology registry + liquidity ontology
 ├── physics/             State-transition physics (velocity, accel, collapse)
 ├── intermarket/         Cross-asset cognition (disagreement, migration, contagion)

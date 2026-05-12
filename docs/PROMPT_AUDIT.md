@@ -24,7 +24,7 @@ What this PR delivers:
 | FastAPI surface for all layers | **IMPLEMENTED** |
 | Ingestion (adapter interface + in-proc adapter) | **IMPLEMENTED** |
 | Narrative / explainability emitter | **IMPLEMENTED** |
-| Causal graph engine | **SCAFFOLDED** (typed interfaces + minimal implementation) |
+| Event lineage graph (formerly "Causal graph engine"; renamed in M3.2) | **SCAFFOLDED** (typed interfaces + minimal implementation) |
 | Liquidity ontology | **SCAFFOLDED** |
 | Transition physics engine | **SCAFFOLDED** |
 | Cross-asset intermarket cognition | **SCAFFOLDED** |

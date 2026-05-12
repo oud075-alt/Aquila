@@ -1,16 +1,42 @@
+"""Per-cycle event lineage graph (legacy module name retained).
+
+The engine that was previously called ``CausalGraphEngine`` builds a
+graph over the event ids of the layer outputs in a single cycle. The
+edges come from two sources only:
+
+1. A static, hand-written list of layer-to-layer adjacencies that
+   describes the cognitive pipeline DAG (``DAG_EDGES``).
+2. The explicit ``LayerOutput.evidence`` citations attached by each
+   layer.
+
+There is no statistical causal inference. There is no do-calculus.
+There is no learned graph. The output is a lineage graph: which
+upstream output was cited by which downstream output. Calling it
+"causal" was a name-trap. See ``docs/adr/ADR-0009-rename-causal-graph-engine.md``.
+
+Public surface:
+
+- ``LineageGraph`` — the honest name.
+- ``CausalGraphEngine`` — deprecation alias. Emits ``DeprecationWarning``
+  on every attribute access. Will be removed two PRs after the rename
+  per HARD RULE #8.
+"""
+
 from __future__ import annotations
+
+import warnings
 
 from aquila.causal.schemas import CausalEdge, CausalEdgeKind, CausalGraph
 from aquila.core.base import LayerOutput
 from aquila.core.types import LayerName
 
 
-class CausalGraphEngine:
-    """Builds an event-level causal graph for a single cycle.
+class LineageGraph:
+    """Builds an event-level lineage graph for a single cycle.
 
-    Edges are derived from the explicit DAG + each `LayerOutput.evidence`
-    list. This is a *deterministic, transparent* causal mapping — no
-    learned causality.
+    Edges come from the explicit pipeline DAG plus each
+    ``LayerOutput.evidence`` list. The graph is deterministic and
+    transparent; it carries no claim of statistical causality.
     """
 
     DAG_EDGES: tuple[tuple[LayerName, LayerName, CausalEdgeKind], ...] = (
@@ -46,3 +72,27 @@ class CausalGraphEngine:
                     weight=o.confidence, rationale="explicit_evidence",
                 ))
         return CausalGraph(edges=edges)
+
+
+class _DeprecatedCausalGraphEngineMeta(type):
+    """Emit ``DeprecationWarning`` on every access of the legacy class."""
+
+    def __getattribute__(cls, item):
+        if item not in {"__class__", "__name__", "__qualname__", "__mro__"}:
+            warnings.warn(
+                "CausalGraphEngine is deprecated; use LineageGraph. "
+                "The legacy name will be removed two PRs after the rename "
+                "(see ADR-0009).",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+        return super().__getattribute__(item)
+
+
+class CausalGraphEngine(LineageGraph, metaclass=_DeprecatedCausalGraphEngineMeta):
+    """Deprecated alias for :class:`LineageGraph`.
+
+    Kept per HARD RULE #8. Do not extend or add behaviour here.
+    """
+
+    pass

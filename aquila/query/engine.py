@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from aquila.causal.engine import CausalGraphEngine
+from aquila.causal.engine import LineageGraph
 from aquila.core.base import LayerOutput
 from aquila.core.types import LayerName
 from aquila.governance.eventstore import EventStore
@@ -47,7 +47,7 @@ class CognitiveQueryEngine:
         if not outs:
             evs = self._proj.by_correlation(q.correlation_id)
             return CausalTraceResult(nodes=[e.event_id for e in evs], edges=[])
-        graph = CausalGraphEngine().build(outs)
+        graph = LineageGraph().build(outs)
         return CausalTraceResult(
             nodes=[o.event_id for o in outs.values()],
             edges=[e.model_dump() for e in graph.edges],
