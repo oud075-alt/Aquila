@@ -1,8 +1,9 @@
 """Hash-chained audit log. Closes audit gap #62.
 
-Each record carries the SHA-256 hash of the previous record. Tampering
-with any record invalidates the chain from that point forward. This is a
-minimal implementation; production deployments may sign the head.
+Each record carries the SHA-256 hash of the previous record AND a SHA-256
+hash of the layer output payload. Tampering with the chain header, the
+confidence/visibility metadata, or the payload body all invalidate the
+chain from that point forward.
 """
 
 from __future__ import annotations
@@ -19,6 +20,20 @@ from aquila.core.base import LayerOutput
 from aquila.core.types import LayerName
 
 
+def _hash_payload(output: LayerOutput) -> str:
+    """SHA-256 of the layer output payload, computed deterministically.
+
+    Sorted keys plus ``default=str`` make this stable across datetimes and
+    other non-JSON-native fields contained in payloads.
+    """
+    blob = json.dumps(
+        output.payload.model_dump(),
+        sort_keys=True,
+        default=str,
+    ).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()
+
+
 class AuditRecord(BaseModel):
     model_config = ConfigDict(frozen=True)
     record_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -28,6 +43,7 @@ class AuditRecord(BaseModel):
     event_id: str
     confidence: float
     visibility: str
+    payload_hash: str = ""
     prev_hash: str = ""
     record_hash: str = ""
 
@@ -40,6 +56,7 @@ class AuditRecord(BaseModel):
             "event_id": self.event_id,
             "confidence": self.confidence,
             "visibility": self.visibility,
+            "payload_hash": self.payload_hash,
             "prev_hash": self.prev_hash,
         }
         blob = json.dumps(body, sort_keys=True).encode("utf-8")
@@ -58,6 +75,7 @@ class AuditLog:
             event_id=output.event_id,
             confidence=output.confidence,
             visibility=output.visibility,
+            payload_hash=_hash_payload(output),
             prev_hash=prev,
         )
         rec = rec.model_copy(update={"record_hash": rec.compute_hash()})
