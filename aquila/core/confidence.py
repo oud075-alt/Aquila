@@ -1,4 +1,4 @@
-"""Confidence calculus — Bayesian-flavoured propagation rules used across
+"""Confidence calculus — weighted-mean propagation rules used across
 layers. Closes audit gap #10 (no confidence-propagation formalism).
 
 We deliberately keep this simple, transparent, and replayable. No hidden
