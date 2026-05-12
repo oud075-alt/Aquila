@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from aquila.attention import AttentionAllocator
-from aquila.causal import CausalGraphEngine
+from aquila.causal import LineageGraph
 from aquila.drift import DriftMonitor
 from aquila.failure.detector import FailureStateDetector
 from aquila.failure.schemas import FailureState
@@ -21,11 +21,11 @@ from aquila.structural.schemas import StructuralState
 from aquila.validation.suite import ValidationSuite
 
 
-def test_causal_graph_builds_for_pipeline_outputs(orchestrator, symbol, synthetic_bars):
+def test_lineage_graph_builds_for_pipeline_outputs(orchestrator, symbol, synthetic_bars):
     last = {}
     for b in synthetic_bars[:5]:
         last = orchestrator.run_tick(symbol, b)
-    graph = CausalGraphEngine().build(last)
+    graph = LineageGraph().build(last)
     assert len(graph.edges) > 0
 
 
