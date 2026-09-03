@@ -1,0 +1,67 @@
+name: SEC E2E Probe
+
+on:
+  push:
+    branches:
+      - tmp-sec-e2e-20260903
+  workflow_dispatch:
+
+jobs:
+  runner-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Runner works
+        run: echo "runner-ok"
+
+  sec-http:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Fetch live Adobe companyfacts
+        env:
+          UA: "VerifiedValueGrowthScanner/ci oud075-alt@users.noreply.github.com"
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 2 --retry-delay 2 \
+            -A "$UA" -H "Accept: application/json" \
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000796343.json" \
+            -o /tmp/adbe.json
+          python3 - <<'PY'
+          import json
+          p="/tmp/adbe.json"
+          d=json.load(open(p))
+          assert int(d["cik"]) == 796343
+          assert "ADOBE" in d["entityName"].upper()
+          assert "us-gaap" in d["facts"]
+          print("SEC_HTTP_PASS", d["entityName"], len(open(p,"rb").read()))
+          PY
+
+  adobe-core-facts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Fetch and assert core XBRL groups exist
+        env:
+          UA: "VerifiedValueGrowthScanner/ci oud075-alt@users.noreply.github.com"
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --retry 2 --retry-delay 2 \
+            -A "$UA" -H "Accept: application/json" \
+            "https://data.sec.gov/api/xbrl/companyfacts/CIK0000796343.json" \
+            -o /tmp/adbe.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open("/tmp/adbe.json"))
+          g=d["facts"]["us-gaap"]
+          groups={
+            "revenue":["RevenueFromContractWithCustomerExcludingAssessedTax","Revenues","SalesRevenueNet"],
+            "net_income":["NetIncomeLossAvailableToCommonStockholdersBasic","NetIncomeLoss","ProfitLoss"],
+            "ocf":["NetCashProvidedByUsedInOperatingActivities"],
+            "capex":["PaymentsToAcquirePropertyPlantAndEquipment","PaymentsForAdditionsToPropertyPlantAndEquipment","PaymentsToAcquireProductiveAssets"],
+          }
+          for n,tags in groups.items():
+            found=[t for t in tags if t in g and g[t].get("units",{}).get("USD")]
+            assert found, f"missing {n}"
+            print(n, found)
+          PY
