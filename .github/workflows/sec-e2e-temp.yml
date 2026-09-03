@@ -1,0 +1,21 @@
+name: SEC E2E Temporary
+
+on:
+  push:
+    branches:
+      - tmp-sec-e2e-20260903
+  workflow_dispatch:
+
+jobs:
+  live-sec:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Live data.sec.gov Companyfacts + TTM assertions
+        env:
+          SEC_USER_AGENT: "VerifiedValueGrowthScanner/ci oud075-alt@users.noreply.github.com"
+        run: node sec-e2e/live_test.cjs
